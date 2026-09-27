@@ -1,0 +1,3018 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#006b3f">
+<title>Bénin Bus - Réservation de billets</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f3f6f5;
+    color:#17201d;
+}
+
+button,input,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    margin:auto;
+    background:#fff;
+    position:relative;
+    overflow:hidden;
+}
+
+.page{
+    display:none;
+    min-height:100vh;
+    padding-bottom:80px;
+}
+
+.page.active{
+    display:block;
+}
+
+.top{
+    background:linear-gradient(135deg,#006b3f,#00965e);
+    color:white;
+    padding:22px 18px;
+}
+
+.top h1{
+    font-size:25px;
+    margin-bottom:5px;
+}
+
+.top p{
+    opacity:.9;
+    font-size:14px;
+}
+
+.logo{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:white;
+    color:#006b3f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:20px;
+    margin-bottom:18px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.container{
+    padding:18px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:14px;
+    box-shadow:0 4px 18px rgba(0,0,0,.07);
+    border:1px solid #edf1ef;
+}
+
+.title{
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.subtitle{
+    color:#6d7773;
+    font-size:13px;
+    margin-top:-9px;
+    margin-bottom:18px;
+}
+
+.field{
+    margin-bottom:14px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:13px;
+    border:1px solid #d9e1dd;
+    border-radius:12px;
+    outline:none;
+    background:#fafcfb;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:#00965e;
+}
+
+.btn{
+    width:100%;
+    border:0;
+    border-radius:13px;
+    padding:14px;
+    font-weight:bold;
+    background:#006b3f;
+    color:white;
+    margin-top:5px;
+}
+
+.btn:hover{
+    background:#005532;
+}
+
+.btn.secondary{
+    background:#e8f4ef;
+    color:#006b3f;
+}
+
+.btn.danger{
+    background:#e53935;
+}
+
+.btn.gray{
+    background:#edf0ef;
+    color:#27312e;
+}
+
+.link{
+    color:#006b3f;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.center{
+    text-align:center;
+}
+
+.small{
+    font-size:12px;
+    color:#727b78;
+}
+
+.big-number{
+    font-size:30px;
+    font-weight:800;
+    color:#006b3f;
+}
+
+/* SPLASH */
+
+#p1{
+    background:linear-gradient(145deg,#004d2c,#00965e);
+    color:white;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+#p1.active{
+    display:flex;
+}
+
+.splash-logo{
+    width:105px;
+    height:105px;
+    border-radius:30px;
+    background:white;
+    color:#006b3f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    font-weight:900;
+    margin:auto auto 25px;
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
+}
+
+.splash h1{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+.splash p{
+    opacity:.9;
+    margin-bottom:35px;
+}
+
+.splash.btn{
+    width:220px;
+    background:white;
+    color:#006b3f;
+}
+
+/* HOME */
+
+.search-box{
+    margin-top:-8px;
+}
+
+.route{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.route div{
+    flex:1;
+}
+
+.route-arrow{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#e8f4ef;
+    color:#006b3f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.trip-card{
+    border:1px solid #e6ece9;
+    border-radius:16px;
+    padding:15px;
+    margin-bottom:13px;
+}
+
+.trip-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.bus-number{
+    font-weight:bold;
+    font-size:18px;
+}
+
+.price{
+    font-weight:800;
+    color:#006b3f;
+}
+
+.trip-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    color:#67716d;
+    margin-bottom:13px;
+}
+
+.available{
+    color:#008a55;
+    font-weight:bold;
+}/* SEATS */
+
+.seat-legend{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    font-size:12px;
+    margin-bottom:16px;
+}
+
+.legend{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.legend-box{
+    width:17px;
+    height:17px;
+    border-radius:5px;
+}
+
+.seat-map{
+    background:#f4f7f6;
+    padding:18px 12px;
+    border-radius:18px;
+}
+
+.driver{
+    background:#28332f;
+    color:white;
+    width:90px;
+    padding:8px;
+    text-align:center;
+    border-radius:8px;
+    margin:0 auto 18px;
+    font-size:12px;
+}
+
+.seat-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 25px 1fr 1fr;
+    gap:7px;
+    margin-bottom:8px;
+}
+
+.aisle{
+    width:25px;
+}
+
+.seat{
+    height:39px;
+    border:0;
+    border-radius:8px;
+    background:#dff3ea;
+    color:#006b3f;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.seat.selected{
+    background:#006b3f;
+    color:white;
+}
+
+.seat.reserved{
+    background:#c9cfcc;
+    color:#69716e;
+    cursor:not-allowed;
+}
+
+/* CONFIRMATION */
+
+.success-icon{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:#e4f7ee;
+    color:#008a55;
+    font-size:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:15px auto;
+}
+
+.qr{
+    width:190px;
+    height:190px;
+    margin:20px auto;
+    background:
+        linear-gradient(90deg,#000 10px,transparent 10px) 0 0/30px 30px,
+        linear-gradient(#000 10px,transparent 10px) 0 0/30px 30px,
+        #fff;
+    border:12px solid white;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:11px;
+    text-align:center;
+}
+
+/* PROFILE */
+
+.profile-head{
+    text-align:center;
+    padding:25px 0;
+}
+
+.avatar{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:#006b3f;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto auto 10px;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.history-item{
+    border-bottom:1px solid #edf0ef;
+    padding:14px 0;
+}
+
+.history-item:last-child{
+    border-bottom:0;
+}
+
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+    background:#e4f7ee;
+    color:#007d4e;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:480px;
+    height:68px;
+    background:white;
+    border-top:1px solid #e5eae8;
+    display:flex;
+    z-index:50;
+}
+
+.nav-btn{
+    flex:1;
+    border:0;
+    background:white;
+    color:#737c79;
+    font-size:11px;
+}
+
+.nav-btn.active{
+    color:#006b3f;
+    font-weight:bold;
+}
+
+.nav-icon{
+    display:block;
+    font-size:21px;
+    margin-bottom:3px;
+}
+
+/* ALERT */
+
+.alert{
+    display:none;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:12px;
+    font-size:13px;
+}
+
+.alert.show{
+    display:block;
+}
+
+.alert.error{
+    background:#ffebeb;
+    color:#b42318;
+}
+
+.alert.success{
+    background:#e7f7ef;
+    color:#006b3f;
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:100;
+    align-items:flex-end;
+    justify-content:center;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-content{
+    width:100%;
+    max-width:480px;
+    background:white;
+    border-radius:22px 22px 0 0;
+    padding:22px;
+    max-height:90vh;
+    overflow:auto;
+}
+
+.close{
+    float:right;
+    border:0;
+    background:#edf0ef;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+}
+
+/* RESPONSIVE */
+
+@media(min-width:600px){
+    body{
+        padding:20px 0;
+    }
+
+   .app{
+        border-radius:25px;
+        box-shadow:0 10px 50px rgba(0,0,0,.12);
+        min-height:calc(100vh - 40px);
+    }
+
+   .bottom-nav{
+        bottom:20px;
+        border-radius:0 0 25px 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================================================
+     PAGE 1 : SPLASH
+========================================================= -->
+
+<section id="p1" class="page active">
+
+    <div class="splash">
+
+        <div class="splash-logo">
+            BB
+        </div>
+
+        <h1>BÉNIN BUS</h1>
+
+        <p>
+            Réservez votre siège.<br>
+            Voyagez simplement.
+        </p>
+
+        <button class="btn" onclick="go(2)">
+            Commencer
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 2 : INSCRIPTION
+========================================================= -->
+
+<section id="p2" class="page">
+
+    <div class="top">
+        <h1>Créer un compte</h1>
+        <p>Rejoignez Bénin Bus</p>
+    </div>
+
+    <div class="container">
+
+        <div id="registerAlert" class="alert"></div>
+
+        <div class="card">
+
+            <div class="field">
+                <label>Prénom</label>
+                <input id="regFirstName" type="text" placeholder="Ex : Amadou">
+            </div>
+
+            <div class="field">
+                <label>Nom</label>
+                <input id="regLastName" type="text" placeholder="Ex : KOFFI">
+            </div>
+
+            <div class="field">
+                <label>Téléphone</label>
+                <input id="regPhone" type="tel" placeholder="Ex : 0190000000">
+            </div>
+
+            <div class="field">
+                <label>Email</label>
+                <input id="regEmail" type="email" placeholder="Ex : exemple@email.com">
+            </div>
+
+            <div class="field">
+                <label>Mot de passe</label>
+                <input id="regPassword" type="password" placeholder="••••••••">
+            </div>
+
+            <button class="btn" onclick="registerUser()">
+                Créer mon compte
+            </button>
+
+        </div>
+
+        <p class="center small">
+            Vous avez déjà un compte?
+            <span class="link" onclick="go(3)">Se connecter</span>
+        </p>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 3 : CONNEXION
+========================================================= -->
+
+<section id="p3" class="page">
+
+    <div class="top">
+        <h1>Connexion</h1>
+        <p>Accédez à votre espace voyageur</p>
+    </div>
+
+    <div class="container">
+
+        <div id="loginAlert" class="alert"></div>
+
+        <div class="card">
+
+            <div class="field">
+                <label>Téléphone ou email</label>
+                <input id="loginIdentifier" type="text"
+                       placeholder="Téléphone ou email">
+            </div>
+
+            <div class="field">
+                <label>Mot de passe</label>
+                <input id="loginPassword" type="password"
+                       placeholder="••••••••">
+            </div>
+
+            <button class="btn" onclick="loginUser()">
+                Se connecter
+            </button>
+
+        </div>
+
+        <p class="center small">
+            Pas encore de compte?
+            <span class="link" onclick="go(2)">Créer un compte</span>
+        </p>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 4 : ACCUEIL
+========================================================= -->
+
+<section id="p4" class="page">
+
+    <div class="top">
+
+        <div class="logo">BB</div>
+
+        <h1 id="welcomeName">
+            Bonjour 👋
+        </h1>
+
+        <p>
+            Où souhaitez-vous voyager?
+        </p>
+
+    </div>
+
+    <div class="container">
+
+        <div class="card search-box">
+
+            <div class="title">
+                Rechercher un voyage
+            </div>
+
+            <div class="route">
+
+                <div class="field">
+                    <label>Départ</label>
+                    <select id="departure">
+                        <option value="Cotonou">Cotonou</option>
+                        <option value="Natitingou">Natitingou</option>
+                        <option value="Parakou">Parakou</option>
+                        <option value="Abomey-Calavi">Abomey-Calavi</option>
+                        <option value="Djougou">Djougou</option>
+                    </select>
+                </div>
+
+                <div class="route-arrow">
+                    →
+                </div>
+
+                <div class="field">
+                    <label>Arrivée</label>
+                    <select id="arrival">
+                        <option value="Natitingou">Natitingou</option>
+                        <option value="Cotonou">Cotonou</option>
+                        <option value="Parakou">Parakou</option>
+                        <option value="Abomey-Calavi">Abomey-Calavi</option>
+                        <option value="Djougou">Djougou</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="field">
+                <label>Date du voyage</label>
+                <input id="travelDate" type="date">
+            </div>
+
+            <button class="btn" onclick="searchTrips()">
+                🔎 Rechercher les bus
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <div class="title">
+                Voyages disponibles
+            </div>
+
+            <p class="subtitle">
+                Sélectionnez un bus pour continuer.
+            </p>
+
+            <div id="tripList"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 5 : LISTE DES BUS
+========================================================= -->
+
+<section id="p5" class="page">
+
+    <div class="top">
+        <h1>Liste des bus</h1>
+        <p id="tripSearchInfo">Voyages disponibles</p>
+    </div>
+
+    <div class="container">
+
+        <div id="busList"></div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 6 : DÉTAIL BUS
+========================================================= -->
+
+<section id="p6" class="page">
+
+    <div class="top">
+        <h1>Détails du voyage</h1>
+        <p>Informations sur votre trajet</p>
+    </div>
+
+    <div class="container">
+
+        <div id="tripDetails"></div>
+
+        <button class="btn" onclick="go(7)">
+            Choisir mon siège
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 7 : SIÈGES
+========================================================= -->
+
+<section id="p7" class="page">
+
+    <div class="top">
+        <h1>Choisir un siège</h1>
+        <p id="seatTripInfo"></p>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="seat-legend">
+
+                <div class="legend">
+                    <span class="legend-box" style="background:#dff3ea"></span>
+                    Disponible
+                </div>
+
+                <div class="legend">
+                    <span class="legend-box" style="background:#006b3f"></span>
+                    Sélectionné
+                </div>
+
+                <div class="legend">
+                    <span class="legend-box" style="background:#c9cfcc"></span>
+                    Réservé
+                </div>
+
+            </div>
+
+            <div class="seat-map">
+
+                <div class="driver">
+                    🚍 Conducteur
+                </div>
+
+                <div id="seatMap"></div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <p class="small">
+                Siège sélectionné
+            </p>
+
+            <h2 id="selectedSeatText">
+                Aucun siège
+            </h2>
+
+            <p style="margin-top:8px">
+                Prix :
+                <strong id="seatPrice">
+                    0 XOF
+                </strong>
+            </p>
+
+            <button class="btn" onclick="continuePassenger()">
+                Continuer
+            </button>
+
+        </div>
+
+    </div>
+
+</section><!-- =========================================================
+     PAGE 8 : INFORMATIONS PASSAGER
+========================================================= -->
+
+<section id="p8" class="page">
+
+    <div class="top">
+        <h1>Informations passager</h1>
+        <p>Complétez votre réservation</p>
+    </div>
+
+    <div class="container">
+
+        <div id="passengerAlert" class="alert"></div>
+
+        <div class="card">
+
+            <div class="field">
+                <label>Nom complet du passager</label>
+                <input id="passengerName"
+                       type="text"
+                       placeholder="Ex : KOFFI Amadou">
+            </div>
+
+            <div class="field">
+                <label>Téléphone</label>
+                <input id="passengerPhone"
+                       type="tel"
+                       placeholder="Ex : 0190000000">
+            </div>
+
+            <div class="field">
+                <label>Bagage</label>
+
+                <select id="baggage">
+                    <option value="0">Aucun</option>
+                    <option value="1">1 bagage</option>
+                    <option value="2">2 bagages</option>
+                </select>
+
+            </div>
+
+            <div class="card" style="background:#f4f8f6">
+
+                <p class="small">
+                    Total à payer
+                </p>
+
+                <div class="big-number" id="passengerTotal">
+                    0 XOF
+                </div>
+
+            </div>
+
+            <button class="btn" onclick="continuePayment()">
+                Continuer vers le paiement
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 9 : PAIEMENT
+========================================================= -->
+
+<section id="p9" class="page">
+
+    <div class="top">
+        <h1>Paiement</h1>
+        <p>Sélectionnez votre moyen de paiement</p>
+    </div>
+
+    <div class="container">
+
+        <div id="paymentAlert" class="alert"></div>
+
+        <div class="card">
+
+            <div class="title">
+                Résumé
+            </div>
+
+            <div id="paymentSummary"></div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="title">
+                Moyen de paiement
+            </div>
+
+            <div class="field">
+
+                <select id="paymentMethod">
+
+                    <option value="MTN_MOMO">
+                        MTN MoMo
+                    </option>
+
+                    <option value="MOOV_MONEY">
+                        Moov Money
+                    </option>
+
+                    <option value="CELTIIS">
+                        Celtiis Money
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="field">
+
+                <label>Numéro de paiement</label>
+
+                <input id="paymentPhone"
+                       type="tel"
+                       placeholder="Ex : 0190000000">
+
+            </div>
+
+            <button class="btn" onclick="doPay()">
+                💳 Payer maintenant
+            </button>
+
+            <p class="small center" style="margin-top:12px">
+                Mode démo : aucun argent réel ne sera débité.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 10 : CONFIRMATION
+========================================================= -->
+
+<section id="p10" class="page">
+
+    <div class="top">
+        <h1>Réservation confirmée</h1>
+        <p>Votre voyage est enregistré</p>
+    </div>
+
+    <div class="container">
+
+        <div class="card center">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2>Paiement réussi</h2>
+
+            <p class="small" style="margin-top:8px">
+                Votre billet Bénin Bus est disponible.
+            </p>
+
+            <div id="confirmationInfo"
+                 style="margin-top:20px">
+            </div>
+
+            <button class="btn" onclick="go(11)">
+                🎫 Voir mon billet
+            </button>
+
+            <button class="btn secondary" onclick="go(4)">
+                Retour à l'accueil
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 11 : BILLET
+========================================================= -->
+
+<section id="p11" class="page">
+
+    <div class="top">
+        <h1>Mon billet</h1>
+        <p>Présentez ce billet lors de l'embarquement</p>
+    </div>
+
+    <div class="container">
+
+        <div id="ticketContent"></div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 13 : PROFIL / HISTORIQUE
+========================================================= -->
+
+<section id="p13" class="page">
+
+    <div class="top">
+        <h1>Mon espace</h1>
+        <p>Profil et historique de voyages</p>
+    </div>
+
+    <div class="container">
+
+        <div class="card profile-head">
+
+            <div class="avatar" id="avatar">
+                BB
+            </div>
+
+            <h2 id="profileName">
+                Voyageur
+            </h2>
+
+            <p class="small" id="profilePhone">
+                —
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div class="title">
+                Mes réservations
+            </div>
+
+            <div id="historyList"></div>
+
+        </div>
+
+        <button class="btn danger" onclick="logoutUser()">
+            Se déconnecter
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<nav class="bottom-nav" id="bottomNav">
+
+    <button class="nav-btn active"
+            onclick="go(4)"
+            id="navHome">
+        <span class="nav-icon">🏠</span>
+        Accueil
+    </button>
+
+    <button class="nav-btn"
+            onclick="go(5)"
+            id="navTrips">
+        <span class="nav-icon">🚌</span>
+        Bus
+    </button>
+
+    <button class="nav-btn"
+            onclick="go(11)"
+            id="navTicket">
+        <span class="nav-icon">🎫</span>
+        Billet
+    </button>
+
+    <button class="nav-btn"
+            onclick="go(13)"
+            id="navProfile">
+        <span class="nav-icon">👤</span>
+        Profil
+    </button>
+
+</nav>
+
+</div>
+
+<script>
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+/*
+   Pour l'instant :
+
+   DEMO_MODE = true
+
+   Plus tard, lorsque notre backend Render sera prêt :
+
+   DEMO_MODE = false
+
+   et :
+
+   API_BASE_URL = "https://TON-BACKEND.onrender.com/api"
+*/
+
+const DEMO_MODE = true;
+
+const API_BASE_URL =
+    "https://TON-BACKEND.onrender.com/api";
+
+/* =========================================================
+   DONNÉES DE DÉMO
+========================================================= */
+
+const buses = [
+
+    {
+        id:"ATT-101",
+        company:"ATT Voyage",
+        departure:"Cotonou",
+        arrival:"Natitingou",
+        time:"07:00",
+        period:"Matin",
+        price:12000,
+        capacity:40,
+        reserved:["02A","02B","05C","07D"]
+    },
+
+    {
+        id:"ATT-205",
+        company:"ATT Voyage",
+        departure:"Cotonou",
+        arrival:"Natitingou",
+        time:"13:00",
+        period:"Après-midi",
+        price:12000,
+        capacity:40,
+        reserved:["01A","03C"]
+    },
+
+    {
+        id:"ATT-312",
+        company:"ATT Voyage",
+        departure:"Cotonou",
+        arrival:"Natitingou",
+        time:"17:00",
+        period:"Soir",
+        price:12000,
+        capacity:40,
+        reserved:[]
+    },
+
+    {
+        id:"ATT-401",
+        company:"ATT Voyage",
+        departure:"Natitingou",
+        arrival:"Cotonou",
+        time:"07:00",
+        period:"Matin",
+        price:12000,
+        capacity:40,
+        reserved:["04A","06B"]
+    },
+
+    {
+        id:"ATT-402",
+        company:"ATT Voyage",
+        departure:"Natitingou",
+        arrival:"Parakou",
+        time:"13:00",
+        period:"Après-midi",
+        price:8000,
+        capacity:40,
+        reserved:["02A"]
+    }
+
+];
+
+/* =========================================================
+   ÉTAT APPLICATION
+========================================================= */
+
+let currentPage = 1;
+
+let selectedTrip = null;
+
+let selectedSeat = null;
+
+let currentReservation = null;/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function getReservations(){
+
+    try{
+        return JSON.parse(
+            localStorage.getItem("bb_res") || "[]"
+        );
+    }catch(e){
+        return [];
+    }
+
+}
+
+function saveReservations(data){
+
+    localStorage.setItem(
+        "bb_res",
+        JSON.stringify(data)
+    );
+
+}
+
+function getTickets(){
+
+    try{
+        return JSON.parse(
+            localStorage.getItem("bb_tickets") || "[]"
+        );
+    }catch(e){
+        return [];
+    }
+
+}
+
+function saveTickets(data){
+
+    localStorage.setItem(
+        "bb_tickets",
+        JSON.stringify(data)
+    );
+
+}
+
+function getUser(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem("bb_user") || "null"
+        );
+
+    }catch(e){
+
+        return null;
+
+    }
+
+}
+
+function saveUser(user){
+
+    localStorage.setItem(
+        "bb_user",
+        JSON.stringify(user)
+    );
+
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function go(page){
+
+    document
+      .querySelectorAll(".page")
+      .forEach(p => p.classList.remove("active"));
+
+    const target =
+        document.getElementById("p" + page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+    currentPage = page;
+
+    updateNavigation(page);
+
+    if(page === 4){
+        renderHome();
+    }
+
+    if(page === 5){
+        renderBusList(buses);
+    }
+
+    if(page === 7){
+        renderSeats();
+    }
+
+    if(page === 8){
+        renderPassenger();
+    }
+
+    if(page === 9){
+        renderPayment();
+    }
+
+    if(page === 11){
+        renderTicket();
+    }
+
+    if(page === 13){
+        renderProfile();
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+function updateNavigation(page){
+
+    document
+      .querySelectorAll(".nav-btn")
+      .forEach(btn => btn.classList.remove("active"));
+
+    if(
+        page === 4 ||
+        page === 5 ||
+        page === 6 ||
+        page === 7 ||
+        page === 8 ||
+        page === 9 ||
+        page === 10
+    ){
+
+        document
+          .getElementById("navHome")
+          .classList.add("active");
+
+    }
+
+    if(page === 11){
+
+        document
+          .getElementById("navTicket")
+          .classList.add("active");
+
+    }
+
+    if(page === 13){
+
+        document
+          .getElementById("navProfile")
+          .classList.add("active");
+
+    }
+
+    const nav =
+        document.getElementById("bottomNav");
+
+    if(
+        page === 1 ||
+        page === 2 ||
+        page === 3
+    ){
+
+        nav.style.display = "none";
+
+    }else{
+
+        nav.style.display = "flex";
+
+    }
+
+}
+
+/* =========================================================
+   ALERTES
+========================================================= */
+
+function showAlert(id,message,type="error"){
+
+    const el =
+        document.getElementById(id);
+
+    if(!el) return;
+
+    el.className =
+        "alert show " + type;
+
+    el.textContent = message;
+
+}
+
+/* =========================================================
+   INSCRIPTION
+========================================================= */
+
+function registerUser(){
+
+    const firstName =
+        document.getElementById("regFirstName")
+      .value.trim();
+
+    const lastName =
+        document.getElementById("regLastName")
+      .value.trim();
+
+    const phone =
+        document.getElementById("regPhone")
+      .value.trim();
+
+    const email =
+        document.getElementById("regEmail")
+      .value.trim();
+
+    const password =
+        document.getElementById("regPassword")
+      .value;
+
+    if(
+      !firstName ||
+      !lastName ||
+      !phone ||
+      !email ||
+      !password
+    ){
+
+        showAlert(
+            "registerAlert",
+            "Veuillez remplir tous les champs."
+        );
+
+        return;
+    }
+
+    const user = {
+
+        id:
+            "USR-" +
+            Date.now(),
+
+        firstName,
+
+        lastName,
+
+        phone,
+
+        email,
+
+        /*
+          DEMO uniquement.
+          Le vrai mot de passe sera hashé
+          côté serveur avec Render.
+        */
+        password,
+
+        role:"traveler"
+
+    };
+
+    saveUser(user);
+
+    showAlert(
+        "registerAlert",
+        "Compte créé avec succès.",
+        "success"
+    );
+
+    setTimeout(() => {
+
+        go(4);
+
+    },700);
+
+}
+
+/* =========================================================
+   CONNEXION
+========================================================= */
+
+function loginUser(){
+
+    const identifier =
+        document
+      .getElementById("loginIdentifier")
+      .value.trim();
+
+    const password =
+        document
+      .getElementById("loginPassword")
+      .value;
+
+    const user = getUser();
+
+    if(
+      !user ||
+        (
+            user.phone!== identifier &&
+            user.email!== identifier
+        ) ||
+        user.password!== password
+    ){
+
+        showAlert(
+            "loginAlert",
+            "Identifiants incorrects."
+        );
+
+        return;
+    }
+
+    showAlert(
+        "loginAlert",
+        "Connexion réussie.",
+        "success"
+    );
+
+    setTimeout(() => {
+
+        go(4);
+
+    },600);
+
+}
+
+/* =========================================================
+   DÉCONNEXION
+========================================================= */
+
+function logoutUser(){
+
+    localStorage.removeItem("bb_user");
+
+    alert("Vous êtes déconnecté.");
+
+    go(3);
+
+}
+
+/* =========================================================
+   ACCUEIL
+========================================================= */
+
+function renderHome(){
+
+    const user = getUser();
+
+    const welcome =
+        document.getElementById("welcomeName");
+
+    if(user){
+
+        welcome.textContent =
+            "Bonjour " + user.firstName + " 👋";
+
+    }else{
+
+        welcome.textContent =
+            "Bonjour 👋";
+
+    }
+
+    renderTripPreview();
+
+}
+
+function renderTripPreview(){
+
+    const list =
+        document.getElementById("tripList");
+
+    const date =
+        document.getElementById("travelDate");
+
+    if(!date.value){
+
+        const today =
+            new Date();
+
+        date.value =
+            today.toISOString().split("T")[0];
+
+    }
+
+    const firstTrips =
+        buses.slice(0,3);
+
+    list.innerHTML =
+        firstTrips.map(trip => {
+
+            const free =
+                getAvailableSeats(trip);
+
+            return `
+
+                <div class="trip-card">
+
+                    <div class="trip-head">
+
+                        <div class="bus-number">
+                            🚌 ${trip.id}
+                        </div>
+
+                        <div class="price">
+                            ${formatMoney(trip.price)}
+                        </div>
+
+                    </div>
+
+                    <div class="trip-info">
+
+                        <span>
+                            ${trip.departure}
+                            →
+                            ${trip.arrival}
+                        </span>
+
+                        <span>
+                            ${trip.time}
+                        </span>
+
+                    </div>
+
+                    <div class="trip-info">
+
+                        <span>
+                            ${trip.period}
+                        </span>
+
+                        <span class="available">
+                            ${free} places
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="btn"
+                        onclick="selectTrip('${trip.id}')">
+
+                        Choisir ce bus
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+/* =========================================================
+   RECHERCHE
+========================================================= */
+
+function searchTrips(){
+
+    const departure =
+        document.getElementById("departure").value;
+
+    const arrival =
+        document.getElementById("arrival").value;
+
+    if(departure === arrival){
+
+        alert(
+            "Le départ et l'arrivée doivent être différents."
+        );
+
+        return;
+    }
+
+    const results =
+        buses.filter(bus =>
+
+            bus.departure === departure &&
+            bus.arrival === arrival
+
+        );
+
+    document.getElementById("tripSearchInfo")
+      .textContent =
+        `${departure} → ${arrival}`;
+
+    renderBusList(results);
+
+    go(5);
+
+}
+
+/* =========================================================
+   LISTE DES BUS
+========================================================= */
+
+function renderBusList(list){
+
+    const container =
+        document.getElementById("busList");
+
+    if(!list.length){
+
+        container.innerHTML = `
+
+            <div class="card center">
+
+                <div style="font-size:40px">
+                    🚌
+                </div>
+
+                <h3>Aucun bus disponible</h3>
+
+                <p class="small"
+                   style="margin-top:8px">
+
+                    Aucun voyage ne correspond
+                    à votre recherche.
+
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML =
+        list.map(trip => {
+
+            const free =
+                getAvailableSeats(trip);
+
+            return `
+
+                <div class="card">
+
+                    <div class="trip-head">
+
+                        <div>
+                            <div class="bus-number">
+                                🚌 ${trip.id}
+                            </div>
+
+                            <div class="small">
+                                ${trip.company}
+                            </div>
+                        </div>
+
+                        <div class="price">
+                            ${formatMoney(trip.price)}
+                        </div>
+
+                    </div>
+
+                    <div class="trip-info">
+
+                        <span>
+                            ${trip.departure}
+                            →
+                            ${trip.arrival}
+                        </span>
+
+                        <strong>
+                            ${trip.time}
+                        </strong>
+
+                    </div>
+
+                    <div class="trip-info">
+
+                        <span>
+                            ${trip.period}
+                        </span>
+
+                        <span class="available">
+                            ${free}/${trip.capacity}
+                            places disponibles
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="btn"
+                        onclick="selectTrip('${trip.id}')">
+
+                        Voir les détails
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+/* =========================================================
+   SÉLECTION BUS
+========================================================= */
+
+function selectTrip(id){
+
+    selectedTrip =
+        buses.find(bus => bus.id === id);
+
+    if(!selectedTrip){
+
+        alert("Bus introuvable.");
+
+        return;
+
+    }
+
+    selectedSeat = null;
+
+    renderTripDetails();
+
+    go(6);
+
+}
+
+/* =========================================================
+   DÉTAILS BUS
+========================================================= */
+
+function renderTripDetails(){
+
+    if(!selectedTrip) return;
+
+    const free =
+        getAvailableSeats(selectedTrip);
+
+    document.getElementById("tripDetails")
+      .innerHTML = `
+
+        <div class="card">
+
+            <div class="center"
+                 style="font-size:45px">
+                🚌
+            </div>
+
+            <h2 class="center">
+                ${selectedTrip.id}
+            </h2>
+
+            <p class="center small">
+                ${selectedTrip.company}
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div class="trip-info">
+
+                <strong>
+                    Départ
+                </strong>
+
+                <span>
+                    ${selectedTrip.departure}
+                </span>
+
+            </div>
+
+            <div class="trip-info">
+
+                <strong>
+                    Arrivée
+                </strong>
+
+                <span>
+                    ${selectedTrip.arrival}
+                </span>
+
+            </div>
+
+            <div class="trip-info">
+
+                <strong>
+                    Heure
+                </strong>
+
+                <span>
+                    ${selectedTrip.time}
+                </span>
+
+            </div>
+
+            <div class="trip-info">
+
+                <strong>
+                    Places
+                </strong>
+
+                <span class="available">
+                    ${free} disponibles
+                </span>
+
+            </div>
+
+            <div class="trip-info">
+
+                <strong>
+                    Prix
+                </strong>
+
+                <span class="price">
+                    ${formatMoney(selectedTrip.price)}
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+   SIÈGES
+========================================================= */
+
+function renderSeats(){
+
+    if(!selectedTrip) return;
+
+    document.getElementById("seatTripInfo")
+      .textContent =
+        `${selectedTrip.id} • ${selectedTrip.departure} → ${selectedTrip.arrival}`;
+
+    const map =
+        document.getElementById("seatMap");
+
+    map.innerHTML = "";
+
+    const reserved =
+        getReservedSeats(selectedTrip);
+
+    for(let row=1; row<=10; row++){
+
+        const rowElement =
+            document.createElement("div");
+
+        rowElement.className =
+            "seat-row";
+
+        const letters =
+            ["A","B","C","D"];
+
+        letters.forEach((letter,index) => {
+
+            if(index === 2){
+
+                const aisle =
+                    document.createElement("div");
+
+                aisle.className = "aisle";
+
+                rowElement.appendChild(aisle);
+
+            }
+
+            const number =
+                String(row).padStart(2,"0") +
+                letter;
+
+            const button =
+                document.createElement("button");
+
+            button.className = "seat";
+
+            button.textContent =
+                number;
+
+            if(reserved.includes(number)){
+
+                button.classList.add("reserved");
+
+                button.disabled = true;
+
+            }else{
+
+                button.onclick =
+                    () => chooseSeat(number);
+
+            }
+
+            if(selectedSeat === number){
+
+                button.classList.add("selected");
+
+            }
+
+            rowElement.appendChild(button);
+
+        });
+
+        map.appendChild(rowElement);
+
+    }
+
+    updateSelectedSeat();
+
+}
+
+/* =========================================================
+   CHOISIR SIÈGE
+========================================================= */
+
+function chooseSeat(seat){
+
+    selectedSeat = seat;
+
+    renderSeats();
+
+}
+
+function updateSelectedSeat(){
+
+    const text =
+        document.getElementById("selectedSeatText");
+
+    const price =
+        document.getElementById("seatPrice");
+
+    if(selectedSeat){
+
+        text.textContent =
+            "Siège " + selectedSeat;
+
+        price.textContent =
+            formatMoney(selectedTrip.price);
+
+    }else{
+
+        text.textContent =
+            "Aucun siège";
+
+        price.textContent =
+            "0 XOF";
+
+    }
+
+}
+
+function getReservedSeats(trip){
+
+    const reserved =
+        [...(trip.reserved || [])];
+
+    const reservations =
+        getReservations();
+
+    reservations.forEach(res => {
+
+        if(
+            res.tripId === trip.id &&
+            res.status === "CONFIRMED"
+        ){
+
+            if(res.seat){
+
+                reserved.push(res.seat);
+
+            }
+
+        }
+
+    });
+
+    return [...new Set(reserved)];
+
+}
+
+function getAvailableSeats(trip){
+
+    return Math.max(
+        0,
+        trip.capacity -
+        getReservedSeats(trip).length
+    );
+
+}
+
+/* =========================================================
+   PASSAGER
+========================================================= */
+
+function continuePassenger(){
+
+    if(!selectedSeat){
+
+        alert(
+            "Veuillez sélectionner un siège."
+        );
+
+        return;
+
+    }
+
+    go(8);
+
+}
+
+function renderPassenger(){
+
+    if(!selectedTrip) return;
+
+    const user = getUser();
+
+    if(user){
+
+        document.getElementById("passengerName")
+          .value =
+            `${user.firstName} ${user.lastName}`;
+
+        document.getElementById("passengerPhone")
+          .value =
+            user.phone;
+
+    }
+
+    document.getElementById("passengerTotal")
+      .textContent =
+        formatMoney(selectedTrip.price);
+
+}
+
+/* =========================================================
+   PAIEMENT
+========================================================= */
+
+function continuePayment(){
+
+    const name =
+        document.getElementById("passengerName")
+      .value.trim();
+
+    const phone =
+        document.getElementById("passengerPhone")
+      .value.trim();
+
+    if(!name ||!phone){
+
+        showAlert(
+            "passengerAlert",
+            "Veuillez renseigner le nom et le téléphone."
+        );
+
+        return;
+
+    }
+
+    go(9);
+
+}
+
+function renderPayment(){
+
+    if(!selectedTrip) return;
+
+    const name =
+        document.getElementById("passengerName")
+      .value;
+
+    const baggage =
+        document.getElementById("baggage")
+      .value;
+
+    document.getElementById("paymentSummary")
+      .innerHTML = `
+
+        <div class="trip-info">
+
+            <span>
+                Voyage
+            </span>
+
+            <strong>
+                ${selectedTrip.id}
+            </strong>
+
+        </div>
+
+        <div class="trip-info">
+
+            <span>
+                Trajet
+            </span>
+
+            <strong>
+                ${selectedTrip.departure}
+                →
+                ${selectedTrip.arrival}
+            </strong>
+
+        </div>
+
+        <div class="trip-info">
+
+            <span>
+                Heure
+            </span>
+
+            <strong>
+                ${selectedTrip.time}
+            </strong>
+
+        </div>
+
+        <div class="trip-info">
+
+            <span>
+                Siège
+            </span>
+
+            <strong>
+                ${selectedSeat}
+            </strong>
+
+        </div>
+
+        <div class="trip-info">
+
+            <span>
+                Passager
+            </span>
+
+            <strong>
+                ${name}
+            </strong>
+
+        </div>
+
+        <div class="trip-info">
+
+            <span>
+                Bagage
+            </span>
+
+            <strong>
+                ${baggage}
+            </strong>
+
+        </div>
+
+        <hr style="border:0;border-top:1px solid #eee;margin:12px 0">
+
+        <div class="trip-info">
+
+            <strong>
+                TOTAL
+            </strong>
+
+            <strong class="price">
+                ${formatMoney(selectedTrip.price)}
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+   PAIEMENT DEMO
+========================================================= */
+
+function doPay(){
+
+    if(!selectedTrip ||!selectedSeat){
+
+        alert(
+            "Les informations de réservation sont incomplètes."
+        );
+
+        return;
+
+    }
+
+    const paymentMethod =
+        document.getElementById("paymentMethod")
+      .value;
+
+    const paymentPhone =
+        document.getElementById("paymentPhone")
+      .value.trim();
+
+    if(!paymentPhone){
+
+        showAlert(
+            "paymentAlert",
+            "Veuillez entrer le numéro de paiement."
+        );
+
+        return;
+
+    }
+
+    /*
+       IMPORTANT :
+
+       Ici nous simulons le paiement.
+
+       Lorsque Render sera connecté,
+       cette fonction appelcette fonction appellera :
+
+       POST /api/payments
+
+       Le serveur vérifiera le paiement
+       avant de confirmer la réservation.
+    */
+
+    const reservations =
+        getReservations();
+
+    const alreadyReserved =
+        reservations.some(res =>
+
+            res.tripId === selectedTrip.id &&
+            res.seat === selectedSeat &&
+            res.status === "CONFIRMED"
+
+        );
+
+    if(alreadyReserved){
+
+        showAlert(
+            "paymentAlert",
+            "Ce siège vient d'être réservé."
+        );
+
+        renderSeats();
+
+        return;
+
+    }
+
+    const user =
+        getUser();
+
+    const reservationNumber =
+        "BB-" +
+        Date.now()
+     .toString()
+     .slice(-8);
+
+    const reservation = {
+
+        id:
+            "RES-" +
+            Date.now(),
+
+        reservationNumber,
+
+        userId:
+            user?
+            user.id :
+            "guest",
+
+        tripId:
+            selectedTrip.id,
+
+        departure:
+            selectedTrip.departure,
+
+        arrival:
+            selectedTrip.arrival,
+
+        date:
+            document.getElementById("travelDate")
+         .value,
+
+        time:
+            selectedTrip.time,
+
+        seat:
+            selectedSeat,
+
+        passenger:
+            document.getElementById("passengerName")
+         .value.trim(),
+
+        passengerPhone:
+            document.getElementById("passengerPhone")
+         .value.trim(),
+
+        baggage:
+            document.getElementById("baggage")
+         .value,
+
+        amount:
+            selectedTrip.price,
+
+        paymentMethod,
+
+        status:
+            "CONFIRMED",
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+    reservations.push(reservation);
+
+    saveReservations(reservations);
+
+    /* TICKET */
+
+    const ticket = {
+
+        id:
+            "TKT-" +
+            Date.now(),
+
+        reservationId:
+            reservation.id,
+
+        ticketNumber:
+            "TICKET-" +
+            reservationNumber,
+
+        qrToken:
+            generateToken(),
+
+        status:
+            "ACTIVE",
+
+        validated:
+            false,
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+    const tickets =
+        getTickets();
+
+    tickets.push(ticket);
+
+    saveTickets(tickets);
+
+    currentReservation =
+        reservation;
+
+    document.getElementById("confirmationInfo")
+     .innerHTML = `
+
+        <div class="card"
+             style="background:#f4f8f6">
+
+            <p class="small">
+                Numéro de réservation
+            </p>
+
+            <h2>
+                ${reservationNumber}
+            </h2>
+
+            <p style="margin-top:10px">
+                🚌 ${selectedTrip.id}
+            </p>
+
+            <p>
+                💺 Siège ${selectedSeat}
+            </p>
+
+            <p>
+                💳 ${paymentMethod}
+            </p>
+
+            <p>
+                💰 ${formatMoney(reservation.amount)}
+            </p>
+
+        </div>
+
+    `;
+
+    go(10);
+
+}
+
+/* =========================================================
+   TICKET
+========================================================= */
+
+function renderTicket(){
+
+    const reservations =
+        getReservations();
+
+    const tickets =
+        getTickets();
+
+    let reservation =
+        currentReservation;
+
+    if(!reservation){
+
+        reservation =
+            reservations[reservations.length - 1];
+
+    }
+
+    if(!reservation){
+
+        document.getElementById("ticketContent")
+         .innerHTML = `
+
+            <div class="card center">
+
+                <h3>
+                    Aucun billet
+                </h3>
+
+                <p class="small"
+                   style="margin-top:8px">
+
+                    Vous n'avez pas encore
+                    effectué de réservation.
+
+                </p>
+
+            </div>
+
+            `;
+
+        return;
+
+    }
+
+    const ticket =
+        tickets.find(
+            t =>
+            t.reservationId === reservation.id
+        );
+
+    document.getElementById("ticketContent")
+     .innerHTML = `
+
+        <div class="card">
+
+            <div class="center">
+
+                <div style="font-size:35px">
+                    🚌
+                </div>
+
+                <h2>
+                    BÉNIN BUS
+                </h2>
+
+                <p class="small">
+                    E-TICKET
+                </p>
+
+            </div>
+
+            <hr style="border:0;
+                       border-top:1px dashed #ddd;
+                       margin:18px 0">
+
+            <div class="trip-info">
+
+                <span>
+                    Réservation
+                </span>
+
+                <strong>
+                    ${reservation.reservationNumber}
+                </strong>
+
+            </div>
+
+            <div class="trip-info">
+
+                <span>
+                    Trajet
+                </span>
+
+                <strong>
+                    ${reservation.departure}
+                    →
+                    ${reservation.arrival}
+                </strong>
+
+            </div>
+
+            <div class="trip-info">
+
+                <span>
+                    Date
+                </span>
+
+                <strong>
+                    ${reservation.date || "—"}
+                </strong>
+
+            </div>
+
+            <div class="trip-info">
+
+                <span>
+                    Heure
+                </span>
+
+                <strong>
+                    ${reservation.time}
+                </strong>
+
+            </div>
+
+            <div class="trip-info">
+
+                <span>
+                    Passager
+                </span>
+
+                <strong>
+                    ${reservation.passenger}
+                </strong>
+
+            </div>
+
+            <div class="trip-info">
+
+                <span>
+                    Siège
+                </span>
+
+                <strong>
+                    ${reservation.seat}
+                </strong>
+
+            </div>
+
+            <div class="trip-info">
+
+                <span>
+                    Montant
+                </span>
+
+                <strong class="price">
+                    ${formatMoney(reservation.amount)}
+                </strong>
+
+            </div>
+
+            <div class="center">
+
+                <div class="qr">
+                    ${ticket? ticket.qrToken : "BB"}
+                </div>
+
+                <p class="small">
+                    QR provisoire — sera remplacé
+                    par un vrai QR sécurisé
+                    avec le backend Render.
+                </p>
+
+            </div>
+
+            <div class="center"
+                 style="margin-top:15px">
+
+                <span class="status">
+                    ✓ CONFIRMÉ
+                </span>
+
+            </div>
+
+        </div>
+
+        <button class="btn secondary"
+                onclick="window.print()">
+
+            🖨️ Imprimer / Enregistrer
+
+        </button>
+
+        `;
+
+}
+
+/* =========================================================
+   PROFIL
+========================================================= */
+
+function renderProfile(){
+
+    const user =
+        getUser();
+
+    const name =
+        document.getElementById("profileName");
+
+    const phone =
+        document.getElementById("profilePhone");
+
+    const avatar =
+        document.getElementById("avatar");
+
+    if(user){
+
+        name.textContent =
+            `${user.firstName} ${user.lastName}`;
+
+        phone.textContent =
+            user.phone;
+
+        avatar.textContent =
+            (
+                user.firstName.charAt(0) +
+                user.lastName.charAt(0)
+            ).toUpperCase();
+
+    }else{
+
+        name.textContent =
+            "Voyageur";
+
+        phone.textContent =
+            "Non connecté";
+
+        avatar.textContent =
+            "BB";
+
+    }
+
+    const history =
+        document.getElementById("historyList");
+
+    const reservations =
+        getReservations();
+
+    if(!reservations.length){
+
+        history.innerHTML = `
+
+            <div class="center">
+
+                <p class="small">
+                    Aucune réservation pour le moment.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    history.innerHTML =
+        reservations
+     .slice()
+     .reverse()
+     .map(res => `
+
+            <div class="history-item">
+
+                <div class="trip-head">
+
+                    <strong>
+                        ${res.departure}
+                        →
+                        ${res.arrival}
+                    </strong>
+
+                    <span class="status">
+                        ${res.status}
+                    </span>
+
+                </div>
+
+                <p class="small">
+                    🚌 ${res.tripId}
+                    • 💺 ${res.seat}
+                </p>
+
+                <p class="small">
+                    🎫 ${res.reservationNumber}
+                </p>
+
+                <p class="price"
+                   style="margin-top:5px">
+
+                    ${formatMoney(res.amount)}
+
+                </p>
+
+            </div>
+
+        `)
+     .join("");
+
+}
+
+/* =========================================================
+   UTILITAIRES
+========================================================= */
+
+function formatMoney(amount){
+
+    return Number(amount)
+     .toLocaleString("fr-FR") +
+        " XOF";
+
+}
+
+function generateToken(){
+
+    return "BB-" +
+        Math.random()
+     .toString(36)
+     .substring(2,10)
+     .toUpperCase();
+
+}
+
+/* =========================================================
+   API RENDER — PRÉPARATION
+========================================================= */
+
+/*
+   Ces fonctions ne sont pas encore utilisées
+   en mode DEMO.
+
+   Elles serviront lorsque nous créerons
+   le backend Node.js sur Render.
+*/
+
+async function apiRequest(endpoint,options={}){
+
+    const response =
+        await fetch(
+            API_BASE_URL + endpoint,
+            {
+                headers:{
+                    "Content-Type":
+                        "application/json",
+                 ...(options.headers || {})
+                },
+             ...options
+            }
+        );
+
+    if(!response.ok){
+
+        throw new Error(
+            "Erreur API : " +
+            response.status
+        );
+
+    }
+
+    return response.json();
+
+}
+
+async function apiLogin(identifier,password){
+
+    return apiRequest(
+        "/auth/login",
+        {
+            method:"POST",
+
+            body:JSON.stringify({
+                identifier,
+                password
+            })
+        }
+    );
+
+}
+
+async function apiGetTrips(params){
+
+    const query =
+        new URLSearchParams(params)
+     .toString();
+
+    return apiRequest(
+        "/trips?" + query
+    );
+
+}
+
+async function apiCreateReservation(data){
+
+    return apiRequest(
+        "/reservations",
+        {
+            method:"POST",
+            body:JSON.stringify(data)
+        }
+    );
+
+}
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        updateNavigation(1);
+
+        const today =
+            new Date()
+         .toISOString()
+         .split("T")[0];
+
+        const date =
+            document.getElementById("travelDate");
+
+        if(date){
+
+            date.value = today;
+
+        }
+
+    }
+);
+
+</script><script src="api.js"></script>
+
+</body>
+</html>
